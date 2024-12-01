@@ -19,8 +19,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("GrabFood Queue Manager")
 
 # Font for text
-font = pygame.font.Font(None, 36)
-font_small = pygame.font.Font(None, 28)
+font = pygame.font.Font("FontThai.ttf", 20)
+font_small = pygame.font.Font("FontThai.ttf", 20)
 
 # Food items for menu
 menu_items = [
