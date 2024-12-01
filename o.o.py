@@ -144,20 +144,6 @@ while running:
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-            if show_queue:
-                view_menu_button = pygame.Rect(300, 500, 150, 50)
-                pygame.draw.rect(screen, GREEN, view_menu_button)
-                if view_menu_button.collidepoint(pos):
-                    show_queue = False
-=======
-    
-
->>>>>>> af876d15e8662736c9cbcd03ba1d23c55ecb2ef4
-
->>>>>>> 30d664ae52a109d84327c51c9480a9736aaa0fb5
     if game_state == "main":
         screen.blit(bg_Main, (0, 0))
         screen.blit(bt_Start, bt_Start_rect)
