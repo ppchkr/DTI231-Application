@@ -69,13 +69,18 @@ def draw_queue():
         draw_text("No orders in queue.", BLACK, 50, y_offset)
     else:
         for i, queued_order in enumerate(queue):
-            draw_text(f"Order {i+1}: {queued_order}", BLACK, 50, y_offset)
-            y_offset += 40
+            draw_text(f"Queue {i+1}:", BLACK, 50, y_offset)
+            y_offset += 20
+            for name, details in queued_order.items():
+                draw_text(f"{name} x {details['quantity']}", BLACK, 50, y_offset)
+                y_offset += 20
+            y_offset += 10  # เพิ่มช่องว่างระหว่างแต่ละคิว
     # Draw Serve button
     serve_rect = pygame.Rect(50, 500, 150, 50)
     pygame.draw.rect(screen, RED, serve_rect)
     draw_text("Serve", WHITE, 70, 510, font_small)
     return serve_rect
+
 
 def handle_click(pos):
     # ตรวจสอบการคลิกที่ปุ่มเมนูภาพและเพิ่มจำนวนเมนูในออเดอร์
