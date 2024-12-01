@@ -122,6 +122,16 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             pos = event.pos
+            
+            if show_queue:
+                # สร้างปุ่ม "View Menu"
+                back_menu_button = pygame.Rect(300, 500, 150, 50)
+                pygame.draw.rect(screen, GREEN, back_menu_button)  # เปลี่ยนสีปุ่มเป็นสีเขียว
+                draw_text("Back to Menu", BLACK, 310, 510, font_small)  # ข้อความในปุ่ม
+                
+                if back_menu_button.collidepoint(pos):
+                    show_queue = False
+                    print("back to menu")
 
             if game_state == "main":
                 if bt_Start_rect.collidepoint(pos):
@@ -141,15 +151,7 @@ while running:
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
-            if show_queue:
-                # สร้างปุ่ม "View Menu"
-                view_menu_button = pygame.Rect(300, 500, 150, 50)
-                pygame.draw.rect(screen, GREEN, view_menu_button)  # เปลี่ยนสีปุ่มเป็นสีเขียว
-                draw_text("Back to Menu", BLACK, 310, 510, font_small)  # ข้อความในปุ่ม
-                
-                if view_menu_button.collidepoint(pos):
-                    show_queue = False
-                    print("back to menu")
+    
 
 
     if game_state == "main":
