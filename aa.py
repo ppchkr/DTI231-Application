@@ -12,15 +12,15 @@ screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 pygame.display.set_caption("foodfood")
 
 # หน้า Main
-bg_Main = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\aa00.png") 
+bg_Main = pygame.image.load("picture\\aa00.png") 
 bg_Main = pygame.transform.scale(bg_Main, (SCREEN_W, SCREEN_H))
 
 # หน้า menu
-bg_menu = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\bb00.png") 
+bg_menu = pygame.image.load("picture\\bb00.png") 
 bg_menu = pygame.transform.scale(bg_menu, (SCREEN_W, SCREEN_H))
 
 # กำหนดปุ่ม 
-bt_Start = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\botton1.png") 
+bt_Start = pygame.image.load("picture\\botton1.png") 
 
 
 # ปรับขนาดปุ่มให้เล็กลง
@@ -55,10 +55,10 @@ while running:
                 
  
         elif game_state == "menu":
-            bt_ap = pygame.image.load("C:\\Users\\Pc\Documents\\GitHub\\DTI231-Application\\picture\\ap.png")
-            bt_pe = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\pe.png")
-            bt_pp = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\pp.png") 
-            bt_pt = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\pt.png")
+            bt_ap = pygame.image.load("picture\\ap.png")
+            bt_pe = pygame.image.load("picture\\pe.png")
+            bt_pp = pygame.image.load("picture\\pp.png") 
+            bt_pt = pygame.image.load("picture\\pt.png")
 
             # ปรับขนาดปุ่มให้เล็กลง
             bt_ap = pygame.transform.scale(bt_ap, (100, 100))
