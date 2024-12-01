@@ -53,7 +53,7 @@ while running:
                 if bt_Start_rect.collidepoint(mouse_pos):
                     game_state = "menu"  # เปลี่ยนไปยังโหมดเมนู
                 
-
+ 
         elif game_state == "menu":
             bt_ap = pygame.image.load("C:\\Users\\Pc\Documents\\GitHub\\DTI231-Application\\picture\\ap.png")
             bt_pe = pygame.image.load("C:\\Users\\Pc\\Documents\\GitHub\\DTI231-Application\\picture\\pe.png")
