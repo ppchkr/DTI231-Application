@@ -1,5 +1,6 @@
 import pygame
 import sys
+from collections import deque
 
 # Initialize Pygame
 pygame.init()
@@ -16,7 +17,7 @@ GRAY = (200, 200, 200)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("GrabFood Simulator")
+pygame.display.set_caption("GrabFood Simulator with Queue Management")
 
 # Font for text
 font = pygame.font.Font(None, 36)
@@ -32,6 +33,7 @@ menu_items = [
 
 # Order details (item_name -> {"quantity": int, "price": float})
 order = {}
+queue = deque()  # Queue to manage orders
 
 def draw_text(text, color, x, y, font_type=font):
     label = font_type.render(text, True, color)
@@ -64,6 +66,14 @@ def draw_order():
         # Calculate total price
         draw_text(f"Total: ${total_price:.2f}", RED, 500, y_offset + 20)
 
+def draw_queue():
+    draw_text("Order Queue:", BLACK, 50, 500)
+    if not queue:
+        draw_text("No orders in queue.", BLACK, 50, 540)
+    else:
+        for i, queued_order in enumerate(queue):
+            draw_text(f"Order {i+1}: {queued_order}", GREEN if i == 0 else BLACK, 50, 540 + i * 30)
+
 def handle_click(pos):
     for item in menu_items:
         if item["rect"].collidepoint(pos):
@@ -74,15 +84,16 @@ def handle_click(pos):
                 order[item["name"]] = {"quantity": 1, "price": item["price"]}  # Add new item to the order
 
 def handle_order_click(pos):
-    # Check if the click is on the order list
-    for i, (name, details) in enumerate(order.items()):
-        item_rect = pygame.Rect(500, 100 + i * 40, 300, 30)
-        if item_rect.collidepoint(pos):
-            # If the user clicks on an item in the order list, reduce its quantity
-            if details["quantity"] > 1:
-                order[name]["quantity"] -= 1
-            else:
-                del order[name]  # Remove item from the order if quantity is 1
+    global order
+    # Check if the user clicks "Place Order" (simulate it with bottom-right click)
+    place_order_rect = pygame.Rect(600, 500, 150, 50)
+    if place_order_rect.collidepoint(pos) and order:
+        queue.append(order.copy())  # Add current order to the queue
+        order.clear()  # Clear the current order
+    # Serve current order
+    serve_order_rect = pygame.Rect(400, 500, 150, 50)
+    if serve_order_rect.collidepoint(pos) and queue:
+        queue.popleft()  # Serve the first order in the queue
 
 def main():
     running = True
@@ -93,11 +104,18 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     handle_click(event.pos)  # Handle adding items to the order
-                    handle_order_click(event.pos)  # Handle removing items from the order
+                    handle_order_click(event.pos)  # Handle queue management
         
         # Draw the screen
         draw_menu()
         draw_order()
+        draw_queue()
+
+        # Draw buttons for "Place Order" and "Serve Order"
+        pygame.draw.rect(screen, GREEN, pygame.Rect(600, 500, 150, 50))
+        draw_text("Place Order", WHITE, 610, 515, font_small)
+        pygame.draw.rect(screen, RED, pygame.Rect(400, 500, 150, 50))
+        draw_text("Serve Order", WHITE, 410, 515, font_small)
 
         # Update display
         pygame.display.flip()
