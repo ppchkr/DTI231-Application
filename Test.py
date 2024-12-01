@@ -17,7 +17,7 @@ food_items = [
 pygame.init()
 screen = pygame.display.set_mode((600, 800))
 pygame.display.set_caption("Food Menu")
-fontWord = pygame.font.Font(r"C:\Users\Python\Desktop\DTI231-Application-main\FontThai.ttf", 20)
+fontWord = pygame.font.Font("FontThai.ttf", 20)
 clock = pygame.time.Clock()
 
 # สี
