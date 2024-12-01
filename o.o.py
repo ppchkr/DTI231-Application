@@ -10,7 +10,6 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-BLUE = (0, 0, 255)
 
 # Screen dimensions
 SCREEN_WIDTH = 800
@@ -41,8 +40,6 @@ def draw_text(text, color, x, y, font_type=font):
 def draw_menu():
     screen.fill(WHITE)
     draw_text("Restaurant Menu", BLACK, 300, 50)
-
-    # วาดเมนูรูปภาพ
     for item in menu_items:
         img = pygame.image.load(item["image"])
         img = pygame.transform.scale(img, (100, 100))  # ปรับขนาด
@@ -69,25 +66,30 @@ def draw_queue():
         draw_text("No orders in queue.", BLACK, 50, y_offset)
     else:
         for i, queued_order in enumerate(queue):
-            draw_text(f"Queue {i+1}:", BLACK, 50, y_offset)
+            draw_text(f"Queue {i + 1}:", BLACK, 50, y_offset)
             y_offset += 20
             for name, details in queued_order.items():
                 draw_text(f"{name} x {details['quantity']}", BLACK, 50, y_offset)
                 y_offset += 20
             y_offset += 10  # เพิ่มช่องว่างระหว่างแต่ละคิว
+
     # Draw Serve button
     serve_rect = pygame.Rect(50, 500, 150, 50)
     pygame.draw.rect(screen, RED, serve_rect)
     draw_text("Serve", WHITE, 70, 510, font_small)
-    return serve_rect
 
+    # Draw Back button
+    back_menu_button = pygame.Rect(300, 500, 150, 50)
+    pygame.draw.rect(screen, GREEN, back_menu_button)
+    draw_text("Back to Menu", BLACK, 310, 510, font_small)
+
+    return serve_rect, back_menu_button
 
 def handle_click(pos):
-    # ตรวจสอบการคลิกที่ปุ่มเมนูภาพและเพิ่มจำนวนเมนูในออเดอร์
     for item in menu_items:
         if item["rect"].collidepoint(pos):
             if item["name"] in order:
-                order[item["name"]]["quantity"] += 1  # เพิ่มจำนวนเมนูที่เลือก
+                order[item["name"]]["quantity"] += 1
             else:
                 order[item["name"]] = {"quantity": 1, "price": item["price"]}
 
@@ -100,7 +102,7 @@ def serve_order():
     if queue:
         queue.popleft()
 
-# Main Menu and Game State Logic
+# Game state and background images
 bg_Main = pygame.image.load("picture\\aa00.png")
 bg_Main = pygame.transform.scale(bg_Main, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -113,7 +115,6 @@ bt_Start_rect = bt_Start.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 
 
 running = True
 game_state = "main"
-
 show_queue = False
 
 while running:
@@ -124,26 +125,18 @@ while running:
             pos = event.pos
             
             if show_queue:
-                # สร้างปุ่ม "View Menu"
-                back_menu_button = pygame.Rect(300, 500, 150, 50)
-                pygame.draw.rect(screen, GREEN, back_menu_button)  # เปลี่ยนสีปุ่มเป็นสีเขียว
-                draw_text("Back to Menu", BLACK, 310, 510, font_small)  # ข้อความในปุ่ม
-                
+                serve_rect, back_menu_button = draw_queue()
                 if back_menu_button.collidepoint(pos):
                     show_queue = False
-                    print("back to menu")
 
-            if game_state == "main":
-                if bt_Start_rect.collidepoint(pos):
-                    game_state = "menu"
+            if game_state == "main" and bt_Start_rect.collidepoint(pos):
+                game_state = "menu"
             
             elif game_state == "menu":
-                if show_queue:
-                    serve_rect = draw_queue()
-                    if serve_rect.collidepoint(pos):
-                        serve_order()
+                if show_queue and serve_rect.collidepoint(pos):
+                    serve_order()
                 else:
-                    handle_click(pos)  # เพิ่มเมนูตามการคลิกที่รูป
+                    handle_click(pos)
                     place_order_button = pygame.Rect(600, 500, 150, 50)
                     if place_order_button.collidepoint(pos):
                         place_order()
@@ -151,19 +144,15 @@ while running:
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
-    
-
-
     if game_state == "main":
-        screen.blit(bg_Main, (0, 0))  # Main Menu Background
-        screen.blit(bt_Start, bt_Start_rect)  # Start Button
+        screen.blit(bg_Main, (0, 0))
+        screen.blit(bt_Start, bt_Start_rect)
     elif game_state == "menu":
         if show_queue:
             draw_queue()
         else:
             draw_menu()
             draw_order()
-            # Buttons for placing order and viewing queue
             place_order_button = pygame.Rect(600, 500, 150, 50)
             pygame.draw.rect(screen, GREEN, place_order_button)
             draw_text("Place Order", WHITE, 610, 510, font_small)
