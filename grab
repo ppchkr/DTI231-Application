@@ -10,6 +10,7 @@ BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+GRAY = (200, 200, 200)
 
 # Screen dimensions
 SCREEN_WIDTH = 800
@@ -19,6 +20,7 @@ pygame.display.set_caption("GrabFood Simulator")
 
 # Font for text
 font = pygame.font.Font(None, 36)
+font_small = pygame.font.Font(None, 28)
 
 # Food items for menu
 menu_items = [
@@ -28,11 +30,11 @@ menu_items = [
     {"name": "Pasta", "price": 7, "rect": pygame.Rect(100, 400, 200, 50)},
 ]
 
-# Order details
-order = []
+# Order details (item_name -> {"quantity": int, "price": float})
+order = {}
 
-def draw_text(text, color, x, y):
-    label = font.render(text, True, color)
+def draw_text(text, color, x, y, font_type=font):
+    label = font_type.render(text, True, color)
     screen.blit(label, (x, y))
 
 def draw_menu():
@@ -53,18 +55,34 @@ def draw_order():
         draw_text("No items ordered yet.", BLACK, 500, 100)
     else:
         y_offset = 100
-        for item in order:
-            draw_text(f"{item['name']} - ${item['price']}", BLACK, 500, y_offset)
+        total_price = 0
+        for i, (name, details) in enumerate(order.items()):
+            draw_text(f"{name} x {details['quantity']} - ${details['price'] * details['quantity']:.2f}", BLACK, 500, y_offset)
             y_offset += 40
+            total_price += details['price'] * details['quantity']
         
         # Calculate total price
-        total_price = sum(item["price"] for item in order)
-        draw_text(f"Total: ${total_price}", RED, 500, y_offset)
+        draw_text(f"Total: ${total_price:.2f}", RED, 500, y_offset + 20)
 
 def handle_click(pos):
     for item in menu_items:
         if item["rect"].collidepoint(pos):
-            order.append(item)
+            # Check if the item is already in the order
+            if item["name"] in order:
+                order[item["name"]]["quantity"] += 1  # Increase quantity
+            else:
+                order[item["name"]] = {"quantity": 1, "price": item["price"]}  # Add new item to the order
+
+def handle_order_click(pos):
+    # Check if the click is on the order list
+    for i, (name, details) in enumerate(order.items()):
+        item_rect = pygame.Rect(500, 100 + i * 40, 300, 30)
+        if item_rect.collidepoint(pos):
+            # If the user clicks on an item in the order list, reduce its quantity
+            if details["quantity"] > 1:
+                order[name]["quantity"] -= 1
+            else:
+                del order[name]  # Remove item from the order if quantity is 1
 
 def main():
     running = True
@@ -74,7 +92,8 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
-                    handle_click(event.pos)
+                    handle_click(event.pos)  # Handle adding items to the order
+                    handle_order_click(event.pos)  # Handle removing items from the order
         
         # Draw the screen
         draw_menu()
