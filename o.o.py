@@ -24,10 +24,10 @@ font_small = pygame.font.Font("FontThai.ttf", 20)
 
 # Food items for menu
 menu_items = [
-    {"name": "Apple", "price": 5, "image": "picture\\ap.png", "rect": pygame.Rect(100, 100, 100, 100)},
-    {"name": "Peach", "price": 6, "image": "picture\\pe.png", "rect": pygame.Rect(250, 100, 100, 100)},
-    {"name": "Pineapple", "price": 7, "image": "picture\\pp.png", "rect": pygame.Rect(100, 250, 100, 100)},
-    {"name": "Potato", "price": 4, "image": "picture\\pt.png", "rect": pygame.Rect(250, 250, 100, 100)},
+    {"name": "ข้าวผัด", "price": 5, "image": "picture\\ap.png", "rect": pygame.Rect(100, 100, 100, 100)},
+    {"name": "ผัดซีอิ๊ว", "price": 6, "image": "picture\\pe.png", "rect": pygame.Rect(250, 100, 100, 100)},
+    {"name": "ผัดกะเพรา", "price": 7, "image": "picture\\pp.png", "rect": pygame.Rect(100, 250, 100, 100)},
+    {"name": "ผัดไทย", "price": 4, "image": "picture\\pt.png", "rect": pygame.Rect(250, 250, 100, 100)},
 ]
 
 # Order and queue management
