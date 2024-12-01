@@ -98,22 +98,23 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    pos = event.pos
-                    if show_queue:
-                        serve_rect = draw_queue()
-                        if serve_rect.collidepoint(pos):
-                            serve_order()
-                    else:
-                        for item in menu_items:
-                            handle_click(pos)
-                        place_order_button = pygame.Rect(600, 500, 150, 50)
-                        if place_order_button.collidepoint(pos):
-                            place_order()
-                        view_queue_button = pygame.Rect(50, 500, 150, 50)
-                        if view_queue_button.collidepoint(pos):
-                            show_queue = True
+            elif event.type == pygame.MOUSEBUTTONUP:  # เปลี่ยนเป็นตรวจจับเมื่อปล่อยปุ่มเมาส์
+                pos = event.pos
+                if show_queue:
+                    serve_rect = draw_queue()
+                    if serve_rect.collidepoint(pos):
+                        serve_order()
+                else:
+                    for item in menu_items:
+                        if item["rect"].collidepoint(pos):
+                            handle_click(pos)  # เพิ่มทีละ 1 ตามการคลิก
+                    place_order_button = pygame.Rect(600, 500, 150, 50)
+                    if place_order_button.collidepoint(pos):
+                        place_order()
+                    view_queue_button = pygame.Rect(50, 500, 150, 50)
+                    if view_queue_button.collidepoint(pos):
+                        show_queue = True
+
 
         if show_queue:
             serve_rect = draw_queue()
