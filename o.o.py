@@ -143,6 +143,7 @@ while running:
 
             if show_queue:
                 view_menu_button = pygame.Rect(300, 500, 150, 50)
+                pygame.draw.rect(screen, GREEN, view_menu_button)
                 if view_menu_button.collidepoint(pos):
                     show_queue = False
 
