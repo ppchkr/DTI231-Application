@@ -12,8 +12,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
 # Screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 550
+SCREEN_HEIGHT = 800
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("GrabFood Queue Manager")
 
@@ -23,10 +23,14 @@ font_small = pygame.font.Font("FontThai.ttf", 20)
 
 # Food items for menu
 menu_items = [
-    {"name": "ข้าวผัด", "price": 35, "image": "picture\\ap.png", "rect": pygame.Rect(100, 100, 100, 100)},
-    {"name": "ผัดซีอิ๊ว", "price": 35, "image": "picture\\pe.png", "rect": pygame.Rect(250, 100, 100, 100)},
-    {"name": "ผัดกะเพรา", "price": 35, "image": "picture\\pp.png", "rect": pygame.Rect(100, 250, 100, 100)},
-    {"name": "ผัดไทย", "price": 35, "image": "picture\\pt.png", "rect": pygame.Rect(250, 250, 100, 100)},
+    {"name": "ข้าวผัด", "price": 35, "image": "picture\\15.png", "rect": pygame.Rect(20, 100, 130, 130)},
+    {"name": "ผัดซีอิ๊ว", "price": 35, "image": "picture\\14.png", "rect": pygame.Rect(160, 100, 130, 130)},
+    {"name": "ผัดกะเพรา", "price": 35, "image": "picture\\13.png", "rect": pygame.Rect(20, 240, 130, 130)},
+    {"name": "ผัดไทย", "price": 35, "image": "picture\\16.png", "rect": pygame.Rect(160, 240, 130, 130)},
+    {"name": "ไก่ทอด", "price": 30, "image": "picture\\17.png", "rect": pygame.Rect(20, 380, 130, 130)},
+    {"name": "ข้าวเปล่า", "price": 15, "image": "picture\\18.png", "rect": pygame.Rect(160, 380, 130, 130)},
+    {"name": "ต้มยำกุ้ง", "price": 60, "image": "picture\\19.png", "rect": pygame.Rect(20, 520, 130, 130)},
+    {"name": "ผัดพริกแกง", "price": 35, "image": "picture\\20.png", "rect": pygame.Rect(160, 520, 130, 130)},
 ]
 
 # Order and queue management
@@ -39,24 +43,24 @@ def draw_text(text, color, x, y, font_type=font):
 
 def draw_menu():
     screen.fill(WHITE)
-    draw_text("Restaurant Menu", BLACK, 300, 50)
+    draw_text("Restaurant Menu", BLACK, 200, 50)
     for item in menu_items:
         img = pygame.image.load(item["image"])
-        img = pygame.transform.scale(img, (100, 100))  # ปรับขนาด
+        img = pygame.transform.scale(img, (130, 130))  # ปรับขนาด
         screen.blit(img, item["rect"])
 
 def draw_order():
-    draw_text("Your Order:", BLACK, 500, 50)
+    draw_text("Your Order:", BLACK, 300, 100)
     if not order:
-        draw_text("No items ordered yet.", BLACK, 500, 100)
+        draw_text("No items ordered yet.", BLACK, 300, 150)
     else:
-        y_offset = 100
+        y_offset = 150
         total_price = 0
         for name, details in order.items():
-            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.2f}", BLACK, 500, y_offset)
+            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.2f}", BLACK, 300, y_offset)
             y_offset += 40
             total_price += details['quantity'] * details['price']
-        draw_text(f"Total: ฿{total_price:.2f}", RED, 500, y_offset + 20)
+        draw_text(f"Total: ฿{total_price:.2f}", RED, 300, y_offset + 20)
 
 def draw_queue():
     screen.fill(WHITE)
@@ -74,14 +78,14 @@ def draw_queue():
             y_offset += 10  # เพิ่มช่องว่างระหว่างแต่ละคิว
 
     # Draw Serve button
-    serve_rect = pygame.Rect(50, 500, 150, 50)
+    serve_rect = pygame.Rect(50, 700, 150, 50)
     pygame.draw.rect(screen, RED, serve_rect)
-    draw_text("Serve", WHITE, 70, 510, font_small)
+    draw_text("Serve", WHITE, 70, 710, font_small)
 
     # Draw Back button
-    back_menu_button = pygame.Rect(300, 500, 150, 50)
+    back_menu_button = pygame.Rect(350, 700, 150, 50)
     pygame.draw.rect(screen, GREEN, back_menu_button)
-    draw_text("Back to Menu", BLACK, 310, 510, font_small)
+    draw_text("Back to Menu", BLACK, 360, 710, font_small)
 
     return serve_rect, back_menu_button
 
@@ -137,10 +141,10 @@ while running:
                     serve_order()
                 else:
                     handle_click(pos)
-                    place_order_button = pygame.Rect(600, 500, 150, 50)
+                    place_order_button = pygame.Rect(350, 700, 150, 50)
                     if place_order_button.collidepoint(pos):
                         place_order()
-                    view_queue_button = pygame.Rect(50, 500, 150, 50)
+                    view_queue_button = pygame.Rect(50, 700, 150, 50)
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
@@ -153,15 +157,16 @@ while running:
         else:
             draw_menu()
             draw_order()
-            place_order_button = pygame.Rect(600, 500, 150, 50)
+            place_order_button = pygame.Rect(350, 700, 150, 50)
             pygame.draw.rect(screen, GREEN, place_order_button)
-            draw_text("Place Order", WHITE, 610, 510, font_small)
-            view_queue_button = pygame.Rect(50, 500, 150, 50)
+            draw_text("Place Order", WHITE, 370, 710, font_small)
+            view_queue_button = pygame.Rect(50, 700, 150, 50)
             pygame.draw.rect(screen, GREEN, view_queue_button)
-            draw_text("View Queue", WHITE, 60, 510, font_small)
+            draw_text("View Queue", WHITE, 60, 710, font_small)
 
     pygame.display.flip()
     pygame.time.Clock().tick(30)
 
 pygame.quit()
 sys.exit()
+          
