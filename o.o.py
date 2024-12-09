@@ -31,7 +31,7 @@ menu_items = [
     {"name": "ข้าวเปล่า", "price": 15, "image": "picture\\18.png", "rect": pygame.Rect(160, 380, 130, 130)},
     {"name": "ต้มยำกุ้ง", "price": 60, "image": "picture\\19.png", "rect": pygame.Rect(20, 520, 130, 130)},
     {"name": "ผัดพริกแกง", "price": 35, "image": "picture\\20.png", "rect": pygame.Rect(160, 520, 130, 130)},
-]   
+]
 
 # Order and queue management
 order = {}
@@ -164,8 +164,8 @@ while running:
                     cart_page = False
                     game_state = "menu"
 
-            # Cart icon click
-            elif cart_icon_rect.collidepoint(pos):
+            # Cart icon click - only visible in the menu
+            elif game_state == "menu" and cart_icon_rect.collidepoint(pos):
                 cart_page = True
 
             # Main game state
@@ -189,6 +189,7 @@ while running:
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
+    # Drawing game states
     if cart_page:
         draw_cart_page()
     elif game_state == "main":
@@ -207,8 +208,9 @@ while running:
             pygame.draw.rect(screen, GREEN, view_queue_button)
             draw_text("View Queue", WHITE, 60, 710, font_small)
 
-    # Display cart icon
-    screen.blit(cart_icon, cart_icon_rect)
+    # Display cart icon only on the menu
+    if game_state == "menu":
+        screen.blit(cart_icon, cart_icon_rect)
 
     pygame.display.flip()
     pygame.time.Clock().tick(30)
