@@ -117,11 +117,11 @@ def draw_queue():
     # Back to Menu button
     back_menu_button = pygame.Rect(350, 700, 150, 50)
     pygame.draw.rect(screen, GREEN, back_menu_button)
-    draw_text("Back to Menu", BLACK, 360, 710, font_small)
+    draw_text("Back to Menu", WHITE, 360, 710, font_small)
 
     return serve_rect, back_menu_button
 
-# Updated handle_click function
+# Function to handle clicks on menu items
 def handle_click(pos):
     global cart_page, game_state
     if cart_icon_rect.collidepoint(pos) and game_state == "menu":
@@ -142,7 +142,9 @@ def place_order():
 
 def serve_order():
     if queue:
+        print(f"Serving order: {queue[0]}")  # Debug statement
         queue.popleft()
+        print(f"Remaining queue: {list(queue)}")  # Debug remaining queue
 
 # Game state and background images
 bg_Main = pygame.image.load("picture\\aa00.png")
@@ -173,7 +175,9 @@ while running:
             elif game_state == "menu":
                 if show_queue:
                     serve_rect, back_menu_button = draw_queue()
-                    if back_menu_button.collidepoint(pos):
+                    if serve_rect.collidepoint(pos):
+                        serve_order()
+                    elif back_menu_button.collidepoint(pos):
                         show_queue = False
                 else:
                     handle_click(pos)
