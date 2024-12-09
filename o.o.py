@@ -169,6 +169,9 @@ while running:
 
             if cart_page:
                 back_menu_button = draw_cart_page()
+                place_order_button = pygame.Rect(200, 0, 150, 50)
+                if place_order_button.collidepoint(pos):
+                    place_order()
                 if back_menu_button.collidepoint(pos):
                     cart_page = False
                     game_state = "menu"
@@ -184,6 +187,7 @@ while running:
                     place_order_button = pygame.Rect(350, 700, 150, 50)
                     if place_order_button.collidepoint(pos):
                         place_order()
+                        print("Place ordered")
                     view_queue_button = pygame.Rect(50, 700, 150, 50)
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
