@@ -200,7 +200,7 @@ while running:
             draw_queue()
         else:
             draw_menu()
-            draw_order()
+            #draw_order()
             place_order_button = pygame.Rect(350, 700, 150, 50)
             pygame.draw.rect(screen, GREEN, place_order_button)
             draw_text("Place Order", WHITE, 370, 710, font_small)
