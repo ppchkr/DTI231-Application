@@ -37,8 +37,8 @@ menu_items = [
 order = {}
 queue = deque()
 
-# Load cart icon
-cart_icon = pygame.image.load("picture\\basket.png")
+# Cart icon
+cart_icon = pygame.image.load("picture\\cart.png")
 cart_icon = pygame.transform.scale(cart_icon, (50, 50))  # Resize icon
 cart_icon_rect = cart_icon.get_rect(topright=(SCREEN_WIDTH - 20, 20))
 
@@ -54,13 +54,6 @@ def draw_menu():
         img = pygame.transform.scale(img, (130, 130))  # Adjust size
         screen.blit(img, item["rect"])
 
-    # Draw cart icon
-    screen.blit(cart_icon, cart_icon_rect)
-
-    # Display item count in cart
-    total_items = sum(details['quantity'] for details in order.values())
-    draw_text(f"{total_items}", RED, cart_icon_rect.left - 20, cart_icon_rect.top + 15)
-
 def draw_order():
     draw_text("Your Order:", BLACK, 300, 100)
     if not order:
@@ -73,6 +66,29 @@ def draw_order():
             y_offset += 40
             total_price += details['quantity'] * details['price']
         draw_text(f"Total: ฿{total_price:.2f}", RED, 300, y_offset + 20)
+
+def draw_cart_page():
+    """Display cart contents."""
+    screen.fill(WHITE)
+    draw_text("Your Cart", BLACK, 50, 50)
+    y_offset = 100
+    total_price = 0
+
+    if not order:
+        draw_text("Your cart is empty.", BLACK, 50, y_offset)
+    else:
+        for name, details in order.items():
+            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.2f}", BLACK, 50, y_offset)
+            y_offset += 40
+            total_price += details['quantity'] * details['price']
+        draw_text(f"Total: ฿{total_price:.2f}", RED, 50, y_offset + 20)
+
+    # Back to Menu button
+    back_menu_button = pygame.Rect(350, 700, 150, 50)
+    pygame.draw.rect(screen, GREEN, back_menu_button)
+    draw_text("Back to Menu", WHITE, 360, 710, font_small)
+
+    return back_menu_button
 
 def draw_queue():
     screen.fill(WHITE)
@@ -87,14 +103,14 @@ def draw_queue():
             for name, details in queued_order.items():
                 draw_text(f"{name} x {details['quantity']}", BLACK, 50, y_offset)
                 y_offset += 20
-            y_offset += 10  # เพิ่มช่องว่างระหว่างแต่ละคิว
+            y_offset += 10  # Add space between queues
 
-    # Draw Serve button
+    # Serve button
     serve_rect = pygame.Rect(50, 700, 150, 50)
     pygame.draw.rect(screen, RED, serve_rect)
     draw_text("Serve", WHITE, 70, 710, font_small)
 
-    # Draw Back button
+    # Back to Menu button
     back_menu_button = pygame.Rect(350, 700, 150, 50)
     pygame.draw.rect(screen, GREEN, back_menu_button)
     draw_text("Back to Menu", BLACK, 360, 710, font_small)
@@ -140,24 +156,29 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             pos = event.pos
-            
+
+            # Cart page actions
             if cart_page:
-                back_menu_button = draw_cart()
+                back_menu_button = draw_cart_page()
                 if back_menu_button.collidepoint(pos):
                     cart_page = False
                     game_state = "menu"
+
+            # Cart icon click
+            elif cart_icon_rect.collidepoint(pos):
+                cart_page = True
+
+            # Main game state
             elif show_queue:
                 serve_rect, back_menu_button = draw_queue()
                 if back_menu_button.collidepoint(pos):
                     show_queue = False
 
-            if game_state == "main" and bt_Start_rect.collidepoint(pos):
+            elif game_state == "main" and bt_Start_rect.collidepoint(pos):
                 game_state = "menu"
-            
+
             elif game_state == "menu":
-                if cart_icon_rect.collidepoint(pos):
-                    cart_page = True
-                elif show_queue and serve_rect.collidepoint(pos):
+                if show_queue and serve_rect.collidepoint(pos):
                     serve_order()
                 else:
                     handle_click(pos)
@@ -168,7 +189,9 @@ while running:
                     if view_queue_button.collidepoint(pos):
                         show_queue = True
 
-    if game_state == "main":
+    if cart_page:
+        draw_cart_page()
+    elif game_state == "main":
         screen.blit(bg_Main, (0, 0))
         screen.blit(bt_Start, bt_Start_rect)
     elif game_state == "menu":
@@ -183,6 +206,9 @@ while running:
             view_queue_button = pygame.Rect(50, 700, 150, 50)
             pygame.draw.rect(screen, GREEN, view_queue_button)
             draw_text("View Queue", WHITE, 60, 710, font_small)
+
+    # Display cart icon
+    screen.blit(cart_icon, cart_icon_rect)
 
     pygame.display.flip()
     pygame.time.Clock().tick(30)
