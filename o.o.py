@@ -12,8 +12,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
 # Screen dimensions
-SCREEN_WIDTH = 550
-SCREEN_HEIGHT = 800
+SCREEN_WIDTH = 450
+SCREEN_HEIGHT = 750
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("GrabFood Queue Manager")
 
@@ -31,11 +31,16 @@ menu_items = [
     {"name": "ข้าวเปล่า", "price": 15, "image": "picture\\18.png", "rect": pygame.Rect(160, 380, 130, 130)},
     {"name": "ต้มยำกุ้ง", "price": 60, "image": "picture\\19.png", "rect": pygame.Rect(20, 520, 130, 130)},
     {"name": "ผัดพริกแกง", "price": 35, "image": "picture\\20.png", "rect": pygame.Rect(160, 520, 130, 130)},
-]
+]   
 
 # Order and queue management
 order = {}
 queue = deque()
+
+# Load cart icon
+cart_icon = pygame.image.load("picture\\basket.png")
+cart_icon = pygame.transform.scale(cart_icon, (50, 50))  # Resize icon
+cart_icon_rect = cart_icon.get_rect(topright=(SCREEN_WIDTH - 20, 20))
 
 def draw_text(text, color, x, y, font_type=font):
     label = font_type.render(text, True, color)
@@ -43,11 +48,18 @@ def draw_text(text, color, x, y, font_type=font):
 
 def draw_menu():
     screen.fill(WHITE)
-    draw_text("Restaurant Menu", BLACK, 200, 50)
+    draw_text("Restaurant Menu", BLACK, 150, 50)
     for item in menu_items:
         img = pygame.image.load(item["image"])
-        img = pygame.transform.scale(img, (130, 130))  # ปรับขนาด
+        img = pygame.transform.scale(img, (130, 130))  # Adjust size
         screen.blit(img, item["rect"])
+
+    # Draw cart icon
+    screen.blit(cart_icon, cart_icon_rect)
+
+    # Display item count in cart
+    total_items = sum(details['quantity'] for details in order.values())
+    draw_text(f"{total_items}", RED, cart_icon_rect.left - 20, cart_icon_rect.top + 15)
 
 def draw_order():
     draw_text("Your Order:", BLACK, 300, 100)
@@ -120,6 +132,7 @@ bt_Start_rect = bt_Start.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 
 running = True
 game_state = "main"
 show_queue = False
+cart_page = False
 
 while running:
     for event in pygame.event.get():
@@ -128,7 +141,12 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             pos = event.pos
             
-            if show_queue:
+            if cart_page:
+                back_menu_button = draw_cart()
+                if back_menu_button.collidepoint(pos):
+                    cart_page = False
+                    game_state = "menu"
+            elif show_queue:
                 serve_rect, back_menu_button = draw_queue()
                 if back_menu_button.collidepoint(pos):
                     show_queue = False
@@ -137,7 +155,9 @@ while running:
                 game_state = "menu"
             
             elif game_state == "menu":
-                if show_queue and serve_rect.collidepoint(pos):
+                if cart_icon_rect.collidepoint(pos):
+                    cart_page = True
+                elif show_queue and serve_rect.collidepoint(pos):
                     serve_order()
                 else:
                     handle_click(pos)
@@ -169,4 +189,3 @@ while running:
 
 pygame.quit()
 sys.exit()
-          
