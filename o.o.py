@@ -79,10 +79,10 @@ def draw_order():
         y_offset = 150
         total_price = 0
         for name, details in order.items():
-            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.2f}", BLACK, 300, y_offset)
+            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.1f}", BLACK, 300, y_offset)
             y_offset += 40
             total_price += details['quantity'] * details['price']
-        draw_text(f"Total: ฿{total_price:.2f}", RED, 300, y_offset + 20)
+        draw_text(f"Total: ฿{total_price:.1f}", RED, 300, y_offset + 20)
 
 # Function to draw cart page
 def draw_cart_page():
