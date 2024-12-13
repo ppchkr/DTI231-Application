@@ -88,28 +88,37 @@ def draw_order():
             total_price += details['quantity'] * details['price']
         draw_text(f"Total: ฿{total_price:.2f}", RED, 300, y_offset + 20)
  
-# Function to draw cart page
 def draw_cart_page():
     screen.fill(WHITE)
     draw_text("Your Cart", BLACK, 50, 50)
     y_offset = 100
     total_price = 0
- 
+
     if not order:
         draw_text("Your cart is empty.", BLACK, 50, y_offset)
     else:
         for name, details in order.items():
-            draw_text(f"{name} x {details['quantity']} - ฿{details['quantity'] * details['price']:.2f}", BLACK, 50, y_offset)
+            draw_text(f"{name}", BLACK, 50, y_offset)
+            draw_text(f"x {details['quantity']}", BLACK, 200, y_offset)
+            draw_text(f"฿{details['quantity'] * details['price']:.2f}", BLACK, 300, y_offset)
+
+            # Add and subtract buttons
+            add_button = pygame.Rect(250, y_offset, 20, 20)
+            subtract_button = pygame.Rect(280, y_offset, 20, 20)
+            pygame.draw.rect(screen, GREEN, add_button)
+            pygame.draw.rect(screen, RED, subtract_button)
+            draw_text("+", WHITE, 252, y_offset)
+            draw_text("-", WHITE, 282, y_offset)
+
             y_offset += 40
             total_price += details['quantity'] * details['price']
+
         draw_text(f"Total: ฿{total_price:.2f}", RED, 50, y_offset + 20)
- 
-    # Back to Menu button
+        
     back_menu_button = pygame.Rect(x_back_menu, y_back_menu, 150, 50)
     pygame.draw.rect(screen, GREEN, back_menu_button)
     draw_text("Back to Menu", BLACK, x_back_menu + 10, y_back_menu + 10, font_small)
  
-    
     place_order_button = pygame.Rect(x_place_order, y_place_order, 150, 50)
     pygame.draw.rect(screen, GREEN, place_order_button)
     draw_text("Place Order", BLACK, x_place_order + 10, y_place_order + 10, font_small)
