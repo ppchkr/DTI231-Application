@@ -45,6 +45,10 @@ menu_items = [
     {"name": "ข้าวเปล่า", "price": 15, "image": "picture\\18.png", "rect": pygame.Rect(160, 380, 130, 130)},
     {"name": "ต้มยำกุ้ง", "price": 60, "image": "picture\\19.png", "rect": pygame.Rect(20, 520, 130, 130)},
     {"name": "ผัดพริกแกง", "price": 35, "image": "picture\\20.png", "rect": pygame.Rect(160, 520, 130, 130)},
+    {"name": "สปาเกตตี้ผัดขี้เมา", "price": 50, "image": "picture\\21.png", "rect": pygame.Rect(300, 380, 130, 130)},
+    {"name": "แกงจืด", "price": 30, "image": "picture\\22.png", "rect": pygame.Rect(300, 100, 130, 130)},
+    {"name": "ไข่ดาว", "price": 10, "image": "picture\\23.png", "rect": pygame.Rect(300, 240, 130, 130)},
+    {"name": "ไข่ข้น", "price": 35, "image": "picture\\24.png", "rect": pygame.Rect(300, 520, 130, 130)},
 ]
  
 # Order and queue management
